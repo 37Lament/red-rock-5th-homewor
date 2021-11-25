@@ -23,7 +23,7 @@ type Checker struct {
 	uh            userHash // 用户信息
 	registerUsers []User   // 注册了但未保存的用户
 }
-
+var opt int//定义全局变量opt进行操作选择
 func (c *Checker) SignIn(username, password string) {
 
 	if _, ok := c.uh[username]; !ok {
@@ -157,7 +157,7 @@ func m1(c *gin.Context) {
 
 }
 
-var opt int//定义全局变量opt进行操作选择
+
 
 func main() {
 	r := gin.Default()
