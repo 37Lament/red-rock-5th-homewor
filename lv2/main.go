@@ -9,15 +9,14 @@ import (
 	"os"
 )
 
-// Binding from JSON
-
+//储存地址
 const filePath = "./users.data"
 
 type User struct {
 	Username string `form:"user" json:"user" binding:"required"`
 	Password string `form:"password" json:"password" binding:"required"`
 }
-
+// map映射关系
 type userHash map[string]string
 
 type Checker struct {
@@ -28,12 +27,15 @@ type Checker struct {
 func (c *Checker) SignIn(username, password string) {
 
 	if _, ok := c.uh[username]; !ok {
+		//没有对应账号，转入opt1
 		opt = 1
 		return
 	} else if c.uh[username] != password {
+		//密码不正确
 		opt = 2
 		return
 	} else {
+		//无问题，正确登陆并储存cookie
 		opt = 3
 		return
 	}
@@ -41,13 +43,15 @@ func (c *Checker) SignIn(username, password string) {
 
 func (c *Checker) SignUp(username, password string) {
 	if _, ok := c.uh[username]; ok {
+		//查询是否已经储存有对应账户
 		opt = 4
 		return
 	} else if len(password) < 6 {
+		//判断密码长度
 		opt = 5
 		return
 	}
-	{
+	{//正常注册
 		opt = 6
 		c.registerUsers = append(c.registerUsers, User{
 			Username: username,
@@ -70,6 +74,7 @@ func (c *Checker) SignUp(username, password string) {
 	}}
 
 func (c *Checker) Save() {
+	//储存函数
 	fail := saveUsers(c.registerUsers)
 	c.registerUsers = fail
 }
@@ -152,7 +157,7 @@ func m1(c *gin.Context) {
 
 }
 
-var opt int
+var opt int//定义全局变量opt进行操作选择
 
 func main() {
 	r := gin.Default()
